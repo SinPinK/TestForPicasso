@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
     path('api/', include('mainapp.api.urls')),
+    path('postinfo/', index),
+    path('infopage/', index),
 ]
