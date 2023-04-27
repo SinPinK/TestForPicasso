@@ -11,13 +11,31 @@ class PostsView(APIView):
         posts = json.loads(c_posts.__getattribute__('_content').decode())
         response['posts'] = posts
 
-        '''for i in range(len(response['posts'])):
+        c_users = requests.get('https://jsonplaceholder.typicode.com/users')
+        users = json.loads(c_users.__getattribute__('_content').decode())
+        response['users'] = users
+
+        c_comments = requests.get('https://jsonplaceholder.typicode.com/comments')
+        comments = json.loads(c_comments.__getattribute__('_content').decode())
+        response['comments'] = comments
+
+        '''for i in range(len(response['users'])):
             print(i)
-            for key in response['posts'][i]:
-                print(key, ': ', response['posts'][i][key])'''
+            for key in response['users'][i]:
+                print(key, ': ', response['users'][i][key])'''
+
+        posts_with_users = []
+        for i in range(len(posts)):
+            for j in range(len(users)):
+                if posts[i]['userId'] == users[j]['id']:
+                    post = {
+                        'post': posts[i],
+                        'user': users[j]
+                    }
+                    posts_with_users.append(post)
+
+        '''for i in range(len(posts_with_users)):
+            for key in posts_with_users[i]:
+                print(key, ': ', posts_with_users[i][key])'''
 
         return Response(json.dumps(response))
-
-    def post(self, request):
-
-        return 'ok'

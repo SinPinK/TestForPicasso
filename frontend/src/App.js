@@ -16,6 +16,7 @@ import { Grid, GridItem } from '@consta/uikit/Grid'
 
 import { PostsPage } from './components/PostsPage'
 import { InfoPage } from './components/InfoPage'
+import { HomePage } from './components/HomePage'
 
 
 function App() {
@@ -23,27 +24,6 @@ function App() {
     const [posts, setPosts] = useState([])
 
     const [valueError, setValueError] = useState('')
-
-    /*const doPosts = (content) => {
-        //event.preventDefault()
-        setPosts(content.posts)
-        console.log('posts: ', posts)
-    }*/
-
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: window.location.origin+'/api/postsview/',
-        }).then(response => {
-            console.log(JSON.parse(response.data))
-            //setContent(JSON.parse(response.data))
-            setPosts(JSON.parse(response.data)['posts'])
-            //doPosts(JSON.parse(response.data))
-        }).catch(error => {
-            console.log(error)
-            setValueError('Quasi per errorem inciderunt')
-        })
-    }, [])
 
     return (
         <Theme preset={presetGpnDefault}>
@@ -54,23 +34,16 @@ function App() {
                         <CustomNavbar/>
                     </Header>
                     <Content className='main-container' >
+                        <HomePage/>
                         <div>
                             <Routes>
                                 <Route path='/postinfo/' element={<PostsPage/>}/>
-                                <Route path='/infopage/' element={<InfoPage/>}/>
+                                <Route path='/infopage/:id/' element={<InfoPage/>}/>
                             </Routes>
                         </div>
-                        {/*posts.map((post, index) => (
-                            <Card className='post-card'shadow={true} horizontalSpace='xl' >
-                                <Grid cols='12'>
-                                    <Text >
-                                        {post.title}
-                                    </Text>
-                                </Grid>
-                            </Card>
-                        ))*/}
-                    </Content>
 
+                    </Content>
+                    <CustomFooter />
                 </Container>
             </BrowserRouter>
             </div>

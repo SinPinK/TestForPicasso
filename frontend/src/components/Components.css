@@ -7,3 +7,8 @@
 .non-shadow-card {
     margin-bottom: 10px;
 }
+
+.post-full-card {
+    margin-lef: 10px;
+    width: 700px;
+}

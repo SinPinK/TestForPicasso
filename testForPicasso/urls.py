@@ -16,12 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from mainapp.views import index
+from mainapp.views import index, request_to_detail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
     path('api/', include('mainapp.api.urls')),
     path('postinfo/', index),
-    path('infopage/', index),
+    path('infopage/<int:id>/', request_to_detail),
 ]
