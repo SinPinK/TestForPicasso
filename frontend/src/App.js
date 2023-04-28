@@ -34,7 +34,7 @@ function App() {
                         <CustomNavbar/>
                     </Header>
                     <Content className='main-container' >
-                        <HomePage/>
+                        <HomePage className='home-page' />
                         <div>
                             <Routes>
                                 <Route path='/postinfo/' element={<PostsPage/>}/>

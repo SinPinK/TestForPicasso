@@ -98,7 +98,7 @@ export const HomePage = () => {
                             {postList.map((post, index) => (
                                 <Grid col='12'>
                                     <Card className='post-preview-card-style' horizontalSpace='xl' >
-                                        <Grid cols='12'>
+                                        <Grid cols='12' className='user-avatar-grid' >
                                             <GridItem col='1'>
                                                 <Avatar name={post.username}/>
                                             </GridItem>
@@ -113,6 +113,13 @@ export const HomePage = () => {
                                             <Text view='link' cursor='pointer' id={post.id} onClick={(event) => clickOnPost(event)}>
                                                 {post.title}
                                             </Text>
+                                            </GridItem>
+                                        </Grid>
+                                        <Grid cols='12' className='truncate-text-grid-style' >
+                                            <GridItem col='6'>
+                                                <Text truncate view='primary'>
+                                                    {post.body}
+                                                </Text>
                                             </GridItem>
                                         </Grid>
                                     </Card>
