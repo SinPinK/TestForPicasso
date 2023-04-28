@@ -14,6 +14,8 @@ import { Button } from '@consta/uikit/Button'
 export const HomePage = () => {
     const [posts, setPosts] = useState([]) // переменная для хранения data по запросу /posts
     const [users, setUsers] = useState([])
+    const [userItems, setUserItems] = useState([])
+    const [userValue, setUserValue] = useState([])
     const [comments, setComments] = useState([])
     const [isClick, setIsClick] = useState(true)
 
@@ -39,6 +41,7 @@ export const HomePage = () => {
             setPosts(JSON.parse(response.data)['posts'])
             setUsers(JSON.parse(response.data)['users'])
             setComments(JSON.parse(response.data)['comments'])
+            setUserItems(JSON.parse(response.data)['user_items'])
             //doPosts(JSON.parse(response.data))
         }).catch(error => {
             console.log(error)
@@ -54,6 +57,10 @@ export const HomePage = () => {
         }
     }
 
+    const onChangeSelectUser = (event) => {
+        setUserValue(event.value)
+    }
+
     return (
         <div>
             <Grid cols='12'>
@@ -62,7 +69,7 @@ export const HomePage = () => {
                         <Grid cols='12'>
                             <GridItem col='1' />
                             <GridItem col='3'>
-                                <Text> Здесь будет select </Text>
+                                <Select caption='Выберите пользователя' items={userItems} value={userValue} onChange={(event) => onChangeSelectUser(event)}/>
                             </GridItem>
                             <GridItem col='3'>
                                 <Button label='Отобразить посты' onClick={(event) => postPosts(event)} />
