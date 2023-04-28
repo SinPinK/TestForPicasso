@@ -7,7 +7,13 @@ from rest_framework.response import Response
 class PostsView(APIView):
     # метод для формирования items для Select'a
     def do_user_items(self, list):
-        items = []
+        items = [
+            {
+                'label': '-//-',
+                'id': 0,
+                'disabled': False
+            }
+        ]
         for i in range(len(list)):
             item = {
                 'label': list[i]['name'],
@@ -39,18 +45,29 @@ class PostsView(APIView):
             for key in response['users'][i]:
                 print(key, ': ', response['users'][i][key])'''
 
-        posts_with_users = []
+        #posts_with_username = []
         for i in range(len(posts)):
             for j in range(len(users)):
                 if posts[i]['userId'] == users[j]['id']:
-                    post = {
-                        'post': posts[i],
-                        'user': users[j]
-                    }
-                    posts_with_users.append(post)
+                    posts[i]['username'] = users[j]['name']
 
         user_items = a.do_user_items(users)
         response['user_items'] = user_items
+
+        users_with_posts = []
+        for i in range(len(users)):
+            users_post = []
+            for j in range(len(posts)):
+                if users[i]['id'] == posts[j]['userId']:
+                    users_post.append(posts[j])
+            user_posts = {
+                'user': users[i],
+                'posts': users_post
+            }
+            users_with_posts.append(user_posts)
+
+        response['users_with_posts'] = users_with_posts
+
         '''for i in range(len(user_items)):
             for key in user_items[i]:
                 print(key, ': ', user_items[i][key])'''

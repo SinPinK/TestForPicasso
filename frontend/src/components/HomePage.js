@@ -9,6 +9,7 @@ import { Text } from '@consta/uikit/Text'
 import { Card } from '@consta/uikit/Card'
 import { Select } from '@consta/uikit/Select'
 import { Button } from '@consta/uikit/Button'
+import { Avatar } from '@consta/uikit/Avatar'
 
 
 export const HomePage = () => {
@@ -16,7 +17,9 @@ export const HomePage = () => {
     const [users, setUsers] = useState([])
     const [userItems, setUserItems] = useState([])
     const [userValue, setUserValue] = useState([])
+    const [usersAndPosts, setUsersAndPosts] = useState([])
     const [comments, setComments] = useState([])
+    const [postList, setPostList] = useState([])
     const [isClick, setIsClick] = useState(true)
 
     const goToPosts = (event) => {
@@ -36,12 +39,15 @@ export const HomePage = () => {
             method: 'GET',
             url: window.location.origin+'/api/postsview/',
         }).then(response => {
-            console.log(JSON.parse(response.data))
+            //console.log(JSON.parse(response.data))
             //setContent(JSON.parse(response.data))
             setPosts(JSON.parse(response.data)['posts'])
             setUsers(JSON.parse(response.data)['users'])
             setComments(JSON.parse(response.data)['comments'])
             setUserItems(JSON.parse(response.data)['user_items'])
+            setUsersAndPosts(JSON.parse(response.data)['users_with_posts'])
+            setPostList(JSON.parse(response.data)['posts'])
+            //console.log(JSON.parse(response.data)['users_with_posts'])
             //doPosts(JSON.parse(response.data))
         }).catch(error => {
             console.log(error)
@@ -59,6 +65,13 @@ export const HomePage = () => {
 
     const onChangeSelectUser = (event) => {
         setUserValue(event.value)
+        console.log(event.value['id'])
+        let id = Number(event.value['id'])
+        if (id === 0) {
+            setPostList(posts)
+        } else {
+            setPostList(usersAndPosts[id]['posts'])
+        }
     }
 
     return (
@@ -82,9 +95,19 @@ export const HomePage = () => {
                 {
                     (isClick === false) && (
                         <div>
-                            {posts.map((post, index) => (
+                            {postList.map((post, index) => (
                                 <Grid col='12'>
                                     <Card className='post-preview-card-style' horizontalSpace='xl' >
+                                        <Grid cols='12'>
+                                            <GridItem col='1'>
+                                                <Avatar name={post.username}/>
+                                            </GridItem>
+                                            <GridItem col='5'>
+                                                <Text view='linkMinor' >
+                                                    {post.username}
+                                                </Text>
+                                            </GridItem>
+                                        </Grid>
                                         <Grid cols='12'>
                                             <GridItem col='12'>
                                             <Text view='link' cursor='pointer' id={post.id} onClick={(event) => clickOnPost(event)}>
