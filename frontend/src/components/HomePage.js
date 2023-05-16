@@ -10,6 +10,9 @@ import { Card } from '@consta/uikit/Card'
 import { Select } from '@consta/uikit/Select'
 import { Button } from '@consta/uikit/Button'
 import { Avatar } from '@consta/uikit/Avatar'
+import { Modal } from '@consta/uikit/Modal'
+
+import { InfoPage } from './InfoPage'
 
 
 export const HomePage = () => {
@@ -20,6 +23,9 @@ export const HomePage = () => {
     const [usersAndPosts, setUsersAndPosts] = useState([])
     const [comments, setComments] = useState([])
     const [postList, setPostList] = useState([])
+    const [idP, setIdP] = useState([])
+
+    const [isPostOpen, setIsPostOpen] = useState(false)
     const [isClick, setIsClick] = useState(true)
 
     const goToPosts = (event) => {
@@ -29,9 +35,10 @@ export const HomePage = () => {
 
     const clickOnPost = (event) => {
         console.log(event.target.id)
-        let id = event.target.id
-        window.location.assign('/infopage/' + id + '/')
-        setIsClick(true)
+        setIdP(event.target.id)
+        //window.location.assign('/infopage/' + id + '/')
+        //setIsClick(true)
+        setIsPostOpen(true)
     }
 
     useEffect(() => {
@@ -47,6 +54,7 @@ export const HomePage = () => {
             setUserItems(JSON.parse(response.data)['user_items'])
             setUsersAndPosts(JSON.parse(response.data)['users_with_posts'])
             setPostList(JSON.parse(response.data)['posts'])
+            //setIsClick(false)
             //console.log(JSON.parse(response.data)['users_with_posts'])
             //doPosts(JSON.parse(response.data))
         }).catch(error => {
@@ -92,27 +100,42 @@ export const HomePage = () => {
                 </GridItem>
             </Grid>
             <Grid cols='12'>
+                <Modal className='post-modal' onClickOutside={() => setIsPostOpen(false)} isOpen={isPostOpen} onEsc={() => setIsPostOpen(false)} >
+                    <InfoPage idP={idP} />
+                </Modal>
+                <Card className='main-card-position' verticalSpace="s" >
                 {
-                    (isClick === false) && (
-                        <div>
+                    (isClick === true) && (
+                    <>
+
                             {postList.map((post, index) => (
-                                <Grid col='12'>
+                            <Grid col='12'>
+
                                     <Card className='post-preview-card-style' horizontalSpace='xl' >
                                         <Grid cols='12' className='user-avatar-grid' >
                                             <GridItem col='1'>
                                                 <Avatar name={post.username}/>
                                             </GridItem>
-                                            <GridItem col='5'>
-                                                <Text view='linkMinor' >
-                                                    {post.username}
+                                            <GridItem col='9' className='name-style-on-main-card' >
+                                                <Text as='div'>
+                                                    <Text view='linkMinor' as='span' size='m' >
+                                                        {post.username}&nbsp;
+                                                    </Text>
+                                                    <Text view='ghost' as='span' size='xs' >
+                                                        {post.email}
+                                                    </Text>
                                                 </Text>
                                             </GridItem>
+
                                         </Grid>
                                         <Grid cols='12'>
-                                            <GridItem col='12'>
-                                            <Text view='link' cursor='pointer' id={post.id} onClick={(event) => clickOnPost(event)}>
-                                                {post.title}
-                                            </Text>
+                                            <GridItem col='12' className='main-page-post-title'>
+                                                <Text as='div' view='linkMinor' >
+                                                    Theme:&nbsp;
+                                                    <Text view='link' as='span' cursor='pointer' id={post.id} onClick={(event) => clickOnPost(event)}>
+                                                        {post.title}
+                                                    </Text>
+                                                </Text>
                                             </GridItem>
                                         </Grid>
                                         <Grid cols='12' className='truncate-text-grid-style' >
@@ -123,12 +146,14 @@ export const HomePage = () => {
                                             </GridItem>
                                         </Grid>
                                     </Card>
-                                </Grid>
+                            </Grid>
                             ))}
-                        </div>
+                            </>
                     )
                 }
 
+
+                </Card>
             </Grid>
         </div>
     )

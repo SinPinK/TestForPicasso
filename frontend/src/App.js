@@ -33,7 +33,8 @@ function App() {
                     <Header>
                         <CustomNavbar/>
                     </Header>
-                    <Content className='main-container' >
+                    <Content className='page-size' >
+
                         <HomePage className='home-page' />
                         <div>
                             <Routes>

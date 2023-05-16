@@ -50,6 +50,7 @@ class PostsView(APIView):
             for j in range(len(users)):
                 if posts[i]['userId'] == users[j]['id']:
                     posts[i]['username'] = users[j]['name']
+                    posts[i]['email'] = users[j]['email']
 
         user_items = a.do_user_items(users)
         response['user_items'] = user_items
@@ -77,4 +78,29 @@ class PostsView(APIView):
             for key in posts_with_users[i]:
                 print(key, ': ', posts_with_users[i][key])'''
 
+        return Response(json.dumps(response))
+
+    def post(self, request):
+        a = PostsView()
+        id_req = ''
+        for key in request.data:
+            id_req = key
+            print(id_req)
+
+        id = id_req
+        print(id)
+        posts_comments = a.request_json('posts/' + str(id) + '/comments')
+        #print(posts_comments)
+        post = a.request_json('posts/' + str(id))
+        #print(post)
+        author = a.request_json('users/' + str(post['userId']))
+        #print(author)
+        response = {
+            'post': post,
+            'author': author,
+            'comments': posts_comments,
+            'comments_count': len(posts_comments)
+        }
+
+        test = 'test'
         return Response(json.dumps(response))
